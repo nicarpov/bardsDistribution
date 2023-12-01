@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% block head %}
+    <!-- Required meta tags -->
+    {% block styles %}
+            <!-- Bootstrap CSS -->
+            {{ bootstrap.load_css() }}
+    {% endblock %}
+    {%  block title %}
+        {% if title %}
+           <title> BardsDistribution - {{ title }}</title>
+        {%  else %}
+            {{ 'Welcome to BardsDistribution' }}
+        {% endif %}
+        {% endblock %}
+    {% endblock %}
+</head>
+
+<body>
+    <!-- Your page content -->
+    <div class="container mt-xxl-5">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {# application content needs to be provided in the app_content block #}
+        {% block app_content %}{% endblock %}
+    </div>
+
+    {% block scripts %}
+        <!-- Optional JavaScript -->
+        {{ bootstrap.load_js() }}
+    {% endblock %}
+</body>
