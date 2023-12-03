@@ -12,6 +12,10 @@ def index():
 @app.route('/signup')
 def signup():
     form = RegisterForm()
+    if form.validate_on_submit():
+        flash('Registration requested by user {}, remember_me {}'
+              .format(form.username.data, form.remember_me.data))
+        return redirect('/index')
     return render_template('signup.html', title='Sign Up', form=form)
 
 
