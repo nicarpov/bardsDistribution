@@ -19,7 +19,29 @@
 
 <body>
     <!-- Your page content -->
-    <div class="container mt-xxl-5">
+
+    <div class="container mt-1">
+        <div class="d-xxl-flex justify-content-xxl-between">
+            <div class="p-1">
+                 <h1 class="text-primary "><a class="text-decoration-none" href="/index">BardsDistribution</a></h1>
+            </div>
+            <div class="p-1">
+                 <ul class="nav">
+                     <li class="nav-item">
+                         <a class="nav-link" href="/profile">Profile</a>
+                     </li>
+                     <li class="nav-item">
+                         <a class="nav-link" href="/explore">Explore</a>
+                     </li>
+                     <li class="nav-item">
+                         <a class="nav-link" href="/signin">Sign In</a>
+                     </li>
+                     <li class="nav-item">
+                         <a class="nav-link" href="/signup">Sign Up</a>
+                     </li>
+                 </ul>
+            </div>
+        </div>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}

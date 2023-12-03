@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
 
 {% block app_content %}
+
+    <div class="d-flex justify-content-center mt-5">
+        {{ render_form(form) }}
+    </div>
 {#    sign in form #}
 {% endblock %}
