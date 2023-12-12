@@ -3,6 +3,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
 
+song_to_learn = db.Table('songs_to_learn',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('song_id', db.Integer, db.ForeignKey('song.id'))
+)
+
+
 @login.user_loader
 def load_user(id):
     return db.session.get(User, int(id))
@@ -16,6 +22,12 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(64), index=True)
     last_name = db.Column(db.String(64), index=True)
 
+    songs_learning = db.relationship(
+        'Song', secondary=song_to_learn,
+        primaryjoin=(song_to_learn.c.user_id == id),
+        secondaryjoin=(song_to_learn.c.song_id == id),
+        backref=db.backref('songs', lazy='dynamic'), lazy='dynamic')
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -24,4 +36,13 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+
+class Song(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(140), index=True, nullable=False)
+    author = db.Column(db.String(140), index=True)
+
+
+
 

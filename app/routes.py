@@ -38,7 +38,7 @@ def signin():
     form = LoginForm()
 
     if form.validate_on_submit():
-        print("Hello")
+
         user = db.session.scalar(
             sa.select(User).where(User.username == form.username.data))
         if user is None or not user.check_password(form.password.data):
