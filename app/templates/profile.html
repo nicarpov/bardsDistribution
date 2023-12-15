@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+
+    <div class="mb-1 bg-gradient-success">
+        <a class="link-primary" href="/add_song">Add New Song</a>
+    </div>
+
+    {% for song in user.songs_learning %}
+        <div class="mb-1 bg-primary">
+            <div class="text-primary"> {{ song.author }} - {{ song.name }}</div>
+        </div>
+    {% endfor %}
+{% endblock %}

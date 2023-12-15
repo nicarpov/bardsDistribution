@@ -26,13 +26,16 @@ class User(UserMixin, db.Model):
         'Song', secondary=song_to_learn,
         primaryjoin=(song_to_learn.c.user_id == id),
         secondaryjoin=(song_to_learn.c.song_id == id),
-        backref=db.backref('songs', lazy='dynamic'), lazy='dynamic')
+        backref=db.backref('users_learnt', lazy='dynamic'), lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def add_song(self, song):
+        self.songs_learning.append(song)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)

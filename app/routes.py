@@ -1,7 +1,7 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, RegisterForm
-from app.models import User
+from app.forms import LoginForm, RegisterForm, AddSong
+from app.models import User, Song
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from urllib.parse import urlsplit
@@ -58,4 +58,25 @@ def signin():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+@app.route('/profile')
+def profile():
+    user = current_user
+    return render_template('profile.html', user=user, title='User Profile')
+
+
+@app.route('/add_song', methods=["GET","POST"])
+def add_song():
+    form = AddSong()
+
+    if form.validate_on_submit():
+        song = Song(name=form.name.data, author=form.author.data)
+        db.session.add(song)
+        db.session.commit()
+        current_user.add_song(song)
+        return redirect(url_for('profile'))
+
+    return render_template('add_song.html', form=form)
+
 
