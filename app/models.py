@@ -3,10 +3,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
 
-song_to_learn = db.Table('songs_to_learn',
+songs_to_learn = db.Table('songs_to_learn',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('song_id', db.Integer, db.ForeignKey('song.id'))
 )
+
 
 
 @login.user_loader
@@ -23,10 +24,11 @@ class User(UserMixin, db.Model):
     last_name = db.Column(db.String(64), index=True)
 
     songs_learning = db.relationship(
-        'Song', secondary=song_to_learn,
-        primaryjoin=(song_to_learn.c.user_id == id),
-        secondaryjoin=(song_to_learn.c.song_id == id),
+        'Song', secondary=songs_to_learn,
+        primaryjoin=(songs_to_learn.c.user_id == id),
+        secondaryjoin=(songs_to_learn.c.song_id == id),
         backref=db.backref('users_learnt', lazy='dynamic'), lazy='dynamic')
+
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -43,7 +45,9 @@ class User(UserMixin, db.Model):
             self.songs_learning.remove(song)
 
     def is_learning(self, song):
-        return self.songs_learning.wheree(song_to_learn.c.song_id == song.id).count() > 0
+        return self.songs_learning.filter(songs_to_learn.c.song_id == song.id).count() > 0
+
+
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
