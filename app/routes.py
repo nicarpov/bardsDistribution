@@ -73,8 +73,9 @@ def add_song():
     if form.validate_on_submit():
         song = Song(name=form.name.data, author=form.author.data)
         db.session.add(song)
-        db.session.commit()
+
         current_user.add_song(song)
+        db.session.commit()
         return redirect(url_for('profile'))
 
     return render_template('add_song.html', form=form)
