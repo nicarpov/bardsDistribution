@@ -35,7 +35,15 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def add_song(self, song):
-        self.songs_learning.append(song)
+        if not self.is_learning(song):
+            self.songs_learning.append(song)
+
+    def remove_song(self, song):
+        if self.is_learning(song):
+            self.songs_learning.remove(song)
+
+    def is_learning(self, song):
+        return self.songs_learning.wheree(song_to_learn.c.song_id == song.id).count() > 0
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
