@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+
+    <div class="mb-1 bg-gradient-success">
+        <a class="link-primary" href="/add_song">Add New Song</a>
+    </div>
+
+    {% for song in songs %}
+        <div class="d-flex mb-1">
+            <div class="text-black"> {{ song.author.name }} - {{ song.name }}
+                (selected by {{ song.users_learning.count() }} users) </div>
+            {% if current_user.is_learning(song) %}
+                <a class="link-dark bg-success-subtle ml-5 p-1 rounded-1" href="{{ url_for('unmark')}}">Unmark</a>
+            {% else %}
+                <a class="link-dark bg-success-subtle ml-5 p-1 rounded-1" href="{{ url_for('mark')}}">Mark</a>
+            {%  endif %}
+        </div>
+    {% endfor %}
+{% endblock %}

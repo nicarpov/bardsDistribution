@@ -51,7 +51,20 @@ class User(UserMixin, db.Model):
 class Song(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140), index=True, nullable=False)
-    author = db.Column(db.String(140), index=True)
+    author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
+
+    def __repr__(self):
+        return "<Song {}>".format(self.name)
+
+
+class Author(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(140), index=True, unique=True, nullable=False)
+    songs = db.relationship('Song', backref='author', lazy='dynamic')
+
+    def __repr__(self):
+        return "<Author {}>".format(self.name)
+
 
 
 

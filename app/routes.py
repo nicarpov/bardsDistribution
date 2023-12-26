@@ -1,7 +1,7 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request
 from app.forms import LoginForm, RegisterForm, AddSong
-from app.models import User, Song
+from app.models import User, Song, Author
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from urllib.parse import urlsplit
@@ -13,6 +13,12 @@ from urllib.parse import urlsplit
 @login_required
 def index():
     return render_template('index.html', title='Sign In')
+
+
+@app.route('/explore')
+def explore():
+    songs = Song.query.join(Author).order_by(Author.name.asc()).all()
+    return render_template('explore.html', songs=songs)
 
 
 @app.route('/signup', methods=['GET','POST'])
@@ -71,7 +77,14 @@ def add_song():
     form = AddSong()
 
     if form.validate_on_submit():
-        song = Song(name=form.name.data, author=form.author.data)
+        author_query = Author.query.filter_by(name=form.author.data)
+        author = None
+        if author_query.count() > 0:
+            author = author_query.first()
+        else:
+            author = Author(name=form.author.data)
+            db.session.add(author)
+        song = Song(name=form.name.data, author=author)
         db.session.add(song)
 
         current_user.add_song(song)
@@ -79,5 +92,10 @@ def add_song():
         return redirect(url_for('profile'))
 
     return render_template('add_song.html', form=form)
+
+
+@app.route('/mark')
+def mark():
+
 
 
