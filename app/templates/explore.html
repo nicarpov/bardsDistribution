@@ -11,10 +11,17 @@
             <div class="text-black"> {{ song.author.name }} - {{ song.name }}
                 (selected by {{ song.users_learning.count() }} users) </div>
             {% if current_user.is_learning(song) %}
-                <a class="link-dark bg-success-subtle ml-5 p-1 rounded-1" href="{{ url_for('unmark')}}">Unmark</a>
+                <form action="{{ url_for('unmark', song_id=song.id)}}" method="post">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit(value="Unmark") }}
+                </form>
             {% else %}
-                <a class="link-dark bg-success-subtle ml-5 p-1 rounded-1" href="{{ url_for('mark')}}">Mark</a>
+                <form action="{{ url_for('mark', song_id=song.id)}}" method="post">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit(value="Mark") }}
+                </form>
             {%  endif %}
+
         </div>
     {% endfor %}
 {% endblock %}

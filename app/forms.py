@@ -44,3 +44,7 @@ class AddSong(FlaskForm):
         if name is not None and author is not None:
             raise ValidationError("Song already exists. Add another song")
 
+
+class EmptyForm(FlaskForm):
+    submit = SubmitField('Submit')
+

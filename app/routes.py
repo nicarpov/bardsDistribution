@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, RegisterForm, AddSong
+from app.forms import LoginForm, RegisterForm, AddSong, EmptyForm
 from app.models import User, Song, Author
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
@@ -18,7 +18,8 @@ def index():
 @app.route('/explore')
 def explore():
     songs = Song.query.join(Author).order_by(Author.name.asc()).all()
-    return render_template('explore.html', songs=songs)
+    form = EmptyForm()
+    return render_template('explore.html', songs=songs, form=form)
 
 
 @app.route('/signup', methods=['GET','POST'])
@@ -94,8 +95,33 @@ def add_song():
     return render_template('add_song.html', form=form)
 
 
-@app.route('/mark')
-def mark():
+@app.post('/mark/<song_id>')
+def mark(song_id):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        song = Song.query.filter_by(id=song_id).first()
+        if song is None:
+            flash('There is no song with id {}'.format(song_id))
+            return redirect(url_for('index'))
+
+        current_user.add_song(song)
+        db.session.commit()
+        return redirect(url_for('explore'))
+
+
+@app.post('/unmark/<song_id>')
+def unmark(song_id):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        song = Song.query.filter_by(id=song_id).first()
+        if song is None:
+            flash('There is no song with id {}'.format(song_id))
+            return redirect(url_for('index'))
+
+        current_user.remove_song(song)
+        db.session.commit()
+        return redirect(url_for('explore'))
+
 
 
 
