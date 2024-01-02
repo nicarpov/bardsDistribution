@@ -2,26 +2,49 @@
 
 {% block app_content %}
 
-    <div class="mb-1 bg-gradient-success">
-        <a class="link-primary" href="/add_song">Add New Song</a>
+
+    <div class="d-flex justify-content-center">
+        <div class="p-2">
+            <div class="d-flex justify-content-between mb-3">
+                <h2 class="text-secondary">Songs</h2>
+                <div class="mb-1 bg-gradient-success">
+                    <a class="btn btn-primary" href="/add_song">Add New Song</a>
+                </div>
+            </div>
+
+            <table class="table table-striped">
+                <tbody>
+                    {% for song in songs %}
+                        <tr>
+                            <td>
+                                <b>{{ song.author.name }}</b>
+                            </td>
+                            <td>
+                                - {{ song.name }}
+                            </td>
+                            <td>
+                                <p class="text-info">{{ song.users_learning.count() }} users learning</p>
+                            </td>
+                            <td>
+                                {% if current_user.is_learning(song) %}
+                                    <form action="{{ url_for('unmark', song_id=song.id)}}" method="post">
+                                        {{ form.hidden_tag() }}
+                                        {{ form.submit(value="Unmark", class="btn btn-danger") }}
+                                    </form>
+                                {% else %}
+                                    <form action="{{ url_for('mark', song_id=song.id)}}" method="post">
+                                        {{ form.hidden_tag() }}
+                                        {{ form.submit(value="Mark", class="btn btn-success") }}
+                                    </form>
+                                {%  endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
     </div>
 
-    {% for song in songs %}
-        <div class="d-flex mb-1">
-            <div class="text-black"> {{ song.author.name }} - {{ song.name }}
-                (selected by {{ song.users_learning.count() }} users) </div>
-            {% if current_user.is_learning(song) %}
-                <form action="{{ url_for('unmark', song_id=song.id)}}" method="post">
-                    {{ form.hidden_tag() }}
-                    {{ form.submit(value="Unmark") }}
-                </form>
-            {% else %}
-                <form action="{{ url_for('mark', song_id=song.id)}}" method="post">
-                    {{ form.hidden_tag() }}
-                    {{ form.submit(value="Mark") }}
-                </form>
-            {%  endif %}
 
-        </div>
-    {% endfor %}
 {% endblock %}

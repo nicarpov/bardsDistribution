@@ -70,7 +70,8 @@ def logout():
 @app.route('/profile')
 def profile():
     user = current_user
-    return render_template('profile.html', user=user, title='User Profile')
+    form = EmptyForm()
+    return render_template('profile.html', user=user, title='User Profile', form=form)
 
 
 @app.route('/add_song', methods=["GET","POST"])

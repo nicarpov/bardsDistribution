@@ -1,14 +1,42 @@
 {% extends 'base.html' %}
 
+
 {% block app_content %}
-    <h1 class="text-secondary">My Songs</h1>
-    <div class="mb-1 bg-gradient-success">
-        <a class="btn btn-primary" href="/add_song">Add New Song</a>
+    <div class="d-flex justify-content-center ">
+        <div class="p-2 ">
+            <div class="d-flex align mb-3">
+                <div class="p-2">
+                    <h2 class="text-secondary">My Songs</h2>
+                </div>
+                <div class="p-2">
+                    <a class="btn btn-primary" href="/add_song">Add New Song</a>
+                </div>
+            </div>
+
+
+            <table class="table table-striped ">
+                <tbody>
+                    {% for song in user.songs_learning.all() %}
+
+                    <tr>
+                        <td> <b>{{ song.author.name }} </b></td>
+                        <td><p>- {{ song.name }} </p></td>
+                        <td>
+                            <form class="btn btn-error"
+                                  action="{{ url_for('unmark', song_id=song.id)}}" method="post">
+                                {{ form.hidden_tag() }}
+                                {{ form.submit(value="Remove", class="btn btn-danger") }}
+                            </form>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
     </div>
 
-    {% for song in user.songs_learning.all() %}
-        <div class="mb-1">
-            <div class="text-black"> {{ song.author.name }} - {{ song.name }}</div>
-        </div>
-    {% endfor %}
+
 {% endblock %}
