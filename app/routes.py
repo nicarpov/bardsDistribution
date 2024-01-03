@@ -107,6 +107,7 @@ def mark(song_id):
 
         current_user.add_song(song)
         db.session.commit()
+
         return redirect(url_for('explore'))
 
 

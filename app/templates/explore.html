@@ -15,6 +15,7 @@
             <table class="table table-striped">
                 <tbody>
                     {% for song in songs %}
+
                         <tr>
                             <td>
                                 <b>{{ song.author.name }}</b>
@@ -23,7 +24,23 @@
                                 - {{ song.name }}
                             </td>
                             <td>
-                                <p class="text-info">{{ song.users_learning.count() }} users learning</p>
+                                <p class="btn btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#info{{ song.id }}">
+                                    <span class="badge rounded-pill bg-black">
+                                        {{ song.users_learning.count() }}
+                                    </span>
+                                    users learning
+                                </p>
+                                <div id="info{{ song.id }}" class="collapse">
+                                    {% for user in song.users_learning.all() %}
+                                        <span class="badge bg-info">
+                                            {% if user.last_name %}
+                                                {{ user.last_name }}
+                                            {%  else %}
+                                                {{ user.username }}
+                                            {% endif %}
+                                        </span>
+                                    {% endfor %}
+                                </div>
                             </td>
                             <td>
                                 {% if current_user.is_learning(song) %}
@@ -38,13 +55,16 @@
                                     </form>
                                 {%  endif %}
                             </td>
+
                         </tr>
+
                     {% endfor %}
                 </tbody>
             </table>
+
         </div>
 
-    </div>
 
+    </div>
 
 {% endblock %}

@@ -18,6 +18,7 @@ def load_user(id):
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
+
     password_hash = db.Column(db.String(128))
 
     first_name = db.Column(db.String(64), index=True)
@@ -43,6 +44,9 @@ class User(UserMixin, db.Model):
 
     def is_learning(self, song):
         return self.songs_learning.filter(songs_to_learn.c.song_id == song.id).count() > 0
+
+    # def songs_learnt(self):
+    #     return self.songs_learning.join(Song, (Author.id == Song.author_id)).order_by(Author.name.asc()).all()
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
