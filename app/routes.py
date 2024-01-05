@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, RegisterForm, AddSong, EmptyForm
+from app.forms import LoginForm, RegisterForm, AddSong, EmptyForm, EditProfile
 from app.models import User, Song, Author
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
@@ -40,7 +40,7 @@ def signin():
 
     if current_user.is_authenticated:
 
-        return redirect(url_for('index'))
+        return redirect(url_for('explore'))
 
     form = LoginForm()
 
@@ -56,7 +56,7 @@ def signin():
         flash("Login successful")
         next_page = request.args.get('next')
         if not next_page or urlsplit(next_page).netloc != '':
-            next_page = url_for('index')
+            next_page = url_for('explore')
         return redirect(next_page)
     return render_template('signin.html', title='Sign In', form=form)
 
@@ -123,6 +123,24 @@ def unmark(song_id):
         current_user.remove_song(song)
         db.session.commit()
         return redirect(url_for('explore'))
+
+
+@app.route('/edit_profile', methods=['GET','POST'])
+def edit_profile():
+    form = EditProfile()
+
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.first_name = form.first_name.data
+        current_user.last_name = form.last_name.data
+        db.session.commit()
+        flash("Your changes applied successfully!")
+        return redirect(url_for('profile'))
+    elif request.method == "GET":
+        form.username.data = current_user.username
+        form.first_name.data = current_user.first_name or ""
+        form.last_name.data = current_user.last_name or ""
+    return render_template('edit_profile.html', form=form)
 
 
 

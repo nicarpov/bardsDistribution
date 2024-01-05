@@ -20,8 +20,8 @@
 <body>
     <!-- Your page content -->
 
-    <div class="container">
-        <div class="d-xxl-flex justify-content-xxl-between">
+    <div class="container" style="width: 80%">
+        <div class="d-flex justify-content-between">
             <div class="p-1">
                  <h1 class="text-primary "><a class="text-decoration-none" href="/index">BardsDistribution</a></h1>
             </div>
@@ -44,15 +44,18 @@
             </div>
         </div>
         {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-info" role="alert">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-info" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
         {% endwith %}
 
         {# application content needs to be provided in the app_content block #}
-        {% block app_content %}{% endblock %}
+        <div class="app_content">
+            {% block app_content %}{% endblock %}
+        </div>
+
     </div>
 
     {% block scripts %}
