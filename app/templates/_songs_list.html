@@ -1,0 +1,69 @@
+<table class="table table-sm table-striped" >
+    <tbody>
+        {% for song in songs.all() %}
+
+            <tr>
+                <td >
+                    <div class="m-1 p-1" >
+                        <b class="m-0 p-0" style="width: fit-content">{{ song.author.name }}</b>
+                    </div>
+
+                </td>
+                <td >
+                    <div class="m-1 p-1">
+                        {{ song.name }}
+                    </div>
+
+                </td>
+                <td style="width: 30%">
+                    <div class="summary d-flex flex-column "  >
+                        <p class="btn btn-outline-dark p-1 m-1"
+                           data-bs-toggle="collapse" data-bs-target=".info{{ song.id }}">
+                            <span class="badge rounded-pill bg-black">
+                                {{ song.users_learning.count() }}
+                            </span>
+                            users learning
+                        </p>
+                        <div  class="d-flex flex-wrap ps-3">
+                            {% for user in song.users_learning.all() %}
+                                <span  class="m-1 info{{ song.id }} badge bg-info bg-opacity-25
+                                    collapse ">
+                                    <a href="{{ url_for('user', username=user.username) }}"
+                                        class="text-decoration-none">
+                                        {% if user.last_name %}
+                                            {{ user.last_name }}
+                                        {%  else %}
+                                            {{ user.username }}
+                                        {% endif %}
+                                    </a>
+
+
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </td>
+                <td >
+                    {% if current_user.is_learning(song) %}
+                        <form action="{{ url_for('unmark', song_id=song.id)}}" method="post"
+                            class="pe-3">
+                            {{ form.hidden_tag() }}
+                            {{ form.submit(value="Unmark", class="btn btn-danger m-1 p-1",
+                                    style="width: 100%") }}
+                        </form>
+                    {% else %}
+                        <form action="{{ url_for('mark', song_id=song.id)}}" method="post"
+                            class="pe-3">
+                            {{ form.hidden_tag() }}
+                            {{ form.submit(value="Mark", class="btn btn-success m-1 p-1",
+                                    style="width: 100%") }}
+                        </form>
+                    {%  endif %}
+                </td>
+
+            </tr>
+
+        {% endfor %}
+    </tbody>
+</table>

@@ -17,7 +17,8 @@ def index():
 
 @app.route('/explore')
 def explore():
-    songs = Song.query.join(Author).order_by(Author.name.asc()).all()
+    songs = Song.query.join(Author).order_by(Author.name)\
+        .order_by(Song.name)
     form = EmptyForm()
     return render_template('explore.html', songs=songs, form=form)
 
@@ -67,11 +68,14 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/profile')
-def profile():
-    user = current_user
+@app.route('/user/<username>')
+def user(username):
+    user = User.query.filter(User.username == username).first()
+    songs = user.songs_learning.join(Author, Song.author_id == Author.id).order_by(Author.name)\
+        .order_by(Song.name)
     form = EmptyForm()
-    return render_template('profile.html', user=user, title='User Profile', form=form)
+    return render_template('user.html', user=user, songs=songs,
+                           title='User Profile', form=form)
 
 
 @app.route('/add_song', methods=["GET","POST"])

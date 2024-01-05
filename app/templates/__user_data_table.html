@@ -1,0 +1,38 @@
+<table class="table">
+    <tbody>
+        <tr>
+            <td>
+                <b>Username</b>
+            </td>
+            <td>
+                {{ user.username }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>First name</b>
+            </td>
+            <td>
+                {% if user.first_name%}
+                    {{ user.first_name }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <b>Last name</b>
+            </td>
+            <td>
+                {% if user.last_name%}
+                    {{ user.last_name }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+
+        </tr>
+    </tbody>
+</table>

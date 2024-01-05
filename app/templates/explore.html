@@ -3,74 +3,29 @@
 {% block app_content %}
 
 
-    <div class="d-flex justify-content-center" >
-        <div class="p-2"  style="width: 80%">
-            <div class="d-flex justify-content-between mb-3">
-                <h2 class="text-secondary">Songs</h2>
-                <div class="mb-1 bg-gradient-success">
+
+        <div class="d-flex flex-column" style="width: 100%">
+            <div class="p-3 pb-0" style="width: fit-content">
+                <h2 class="m-0">Songs</h2>
+            </div>
+            <div class="px-3 my-2 bg-body rounded-4" >
+
+                <div class="d-flex mb-3 p-2 justify-content-between align-items-center">
+                    <p class=" p-1 m-1">
+                    Total songs
+                    <span class="badge rounded-pill bg-black">
+                        {{ songs.count() }}
+                    </span>
+                    </p>
                     <a class="btn btn-primary" href="/add_song">Add New Song</a>
                 </div>
+
+                {%  include '_songs_list.html' %}
             </div>
-
-            <table class="table table-sm table-striped" >
-                <tbody>
-                    {% for song in songs %}
-
-                        <tr>
-                            <td >
-                                <b>{{ song.author.name }}</b>
-                            </td>
-                            <td >
-                                - {{ song.name }}
-                            </td>
-                            <td style="width: 30%">
-                                <div class="summary d-flex flex-column "  >
-                                    <p id="song_summary{{ song.id }}" class="btn btn-outline-dark p-1 m-1"
-                                       data-bs-toggle="collapse" data-bs-target=".info{{ song.id }}">
-                                        <span class="badge rounded-pill bg-black">
-                                            {{ song.users_learning.count() }}
-                                        </span>
-                                        users learning
-                                    </p>
-                                    <div  class="d-flex flex-wrap ps-3">
-                                        {% for user in song.users_learning.all() %}
-                                            <span  class="m-1 info{{ song.id }} badge bg-info collapse">
-
-                                                {% if user.last_name %}
-                                                    {{ user.last_name }}
-                                                {%  else %}
-                                                    {{ user.username }}
-                                                {% endif %}
-
-                                            </span>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-
-                            </td>
-                            <td >
-                                {% if current_user.is_learning(song) %}
-                                    <form action="{{ url_for('unmark', song_id=song.id)}}" method="post">
-                                        {{ form.hidden_tag() }}
-                                        {{ form.submit(value="Unmark", class="btn btn-danger") }}
-                                    </form>
-                                {% else %}
-                                    <form action="{{ url_for('mark', song_id=song.id)}}" method="post">
-                                        {{ form.hidden_tag() }}
-                                        {{ form.submit(value="Mark", class="btn btn-success") }}
-                                    </form>
-                                {%  endif %}
-                            </td>
-
-                        </tr>
-
-                    {% endfor %}
-                </tbody>
-            </table>
-
         </div>
 
 
-    </div>
+
+
 
 {% endblock %}

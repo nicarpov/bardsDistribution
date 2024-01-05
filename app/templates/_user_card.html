@@ -1,0 +1,14 @@
+<div class="d-flex flex-column mb-3">
+    <div class="d-flex align-items-center">
+        <h2 class="p-1 ps-0 m-1 ms-0">{{ user.first_name }} {{ user.last_name }}</h2>
+        {%- if user == current_user -%}
+            <div class="px-2 pt-1">
+                <a class="btn btn-primary p-1 px-3 mx-1 mt-1" href="/edit_profile">Edit</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <p class="text-secondary m-0 ps-2">{{ user.username }}</p>
+
+
+</div>
