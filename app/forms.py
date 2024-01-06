@@ -4,7 +4,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, EqualTo, Email, ValidationError
 import sqlalchemy as sa
 from app import db
-from app.models import User
+from app.models import User, Song, Author
 
 
 class LoginForm(FlaskForm):
@@ -30,4 +30,30 @@ class RegisterForm(FlaskForm):
         user = db.session.scalar(sa.select(User).where(User.username == username.data))
         if user is not None:
             raise ValidationError("Please enter different username")
+
+
+class AddSong(FlaskForm):
+    name = StringField("Song name:", validators=[DataRequired()])
+    author = StringField("Author name:", validators=[DataRequired()])
+    submit = SubmitField("Add")
+
+    def validate_name(self, name):
+        name = db.session.scalar(sa.select(Song).where(Song.name == name.data))
+        author = db.session.scalar(sa.select(Author).where(Author.name == self.author.data))
+
+        if name is not None and author is not None:
+            raise ValidationError("Song already exists. Add another song")
+
+
+class EmptyForm(FlaskForm):
+    submit = SubmitField('Submit')
+
+class EditProfile(FlaskForm):
+    username = StringField("Username", validators=[DataRequired()])
+    first_name = StringField("First name", validators=[DataRequired()])
+    last_name = StringField("Last name", validators=[DataRequired()])
+    submit = SubmitField("Apply Changes")
+
+
+
 

@@ -11,7 +11,7 @@
         {% if title %}
            <title> BardsDistribution - {{ title }}</title>
         {%  else %}
-            {{ 'Welcome to BardsDistribution' }}
+            <title> {{ 'Welcome to BardsDistribution' }}</title>
         {% endif %}
         {% endblock %}
     {% endblock %}
@@ -20,8 +20,8 @@
 <body>
     <!-- Your page content -->
 
-    <div class="container mt-1">
-        <div class="d-xxl-flex justify-content-xxl-between">
+    <div class="container " style="width: 80%">
+        <div class="d-flex justify-content-between">
             <div class="p-1">
                  <h1 class="text-primary "><a class="text-decoration-none" href="/index">BardsDistribution</a></h1>
             </div>
@@ -31,13 +31,14 @@
                      {%  if not current_user.is_anonymous %}
 
                          <li class="nav-item">
-                         <a class="nav-link" href="/profile">Profile</a>
+                         <a class="nav-link" href="{{ url_for('user', username=current_user.username)}}">
+                             {{ current_user.username }}</a>
                          </li>
                          <li class="nav-item">
-                             <a class="nav-link" href="/explore">Explore</a>
+                             <a class="nav-link" href="{{ url_for('explore') }}">Explore</a>
                          </li>
                          <li class="nav-item">
-                             <a class="nav-link" href="/logout">Logout</a>
+                             <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
                          </li>
 
                      {% endif %}
@@ -45,15 +46,18 @@
             </div>
         </div>
         {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-info" role="alert">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-info" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
         {% endwith %}
 
         {# application content needs to be provided in the app_content block #}
-        {% block app_content %}{% endblock %}
+        <div class="app_content p-2 d-flex justify-content-center">
+            {% block app_content %}{% endblock %}
+        </div>
+
     </div>
 
     {% block scripts %}
