@@ -1,5 +1,5 @@
 # bardsDistribution
-An application for manage songs rehersal
+An application for managing songs rehersal
 
 <h1>HOW TO RUN IT</h1>
 
